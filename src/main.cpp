@@ -33,45 +33,21 @@ void display()
         glutSwapBuffers();
 }
 
-int main (int argc, char * argv[])
-{
- 
-std::string vertexSource = "";
-std::string fragmentSource = "";
-
-// Create an empty vertex shader handle
-GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-
-// Send the vertex shader source code to GL
-// Note that std::string's .c_str is NULL character terminated.
-const GLchar *source = (const GLchar *)vertexSource.c_str();
-glShaderSource(vertexShader, 1, &source, 0);
-
-// Compile the vertex shader
-glCompileShader(vertexShader);
-
-GLint isCompiled = 0;
-glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &isCompiled);
-if(isCompiled == GL_FALSE)
-{
-	GLint maxLength = 0;
-	glGetShaderiv(vertexShader, GL_INFO_LOG_LENGTH, &maxLength);
-
-	// The maxLength includes the NULL character
-	std::vector<GLchar> infoLog(maxLength);
-	glGetShaderInfoLog(vertexShader, maxLength, &maxLength, &infoLog[0]);
-	
-	// We don't need the shader anymore.
-	glDeleteShader(vertexShader);
-
-	// Use the infoLog as you see fit.
-	
-	// In this simple program, we'll just leave
-	return 0;
-}
-
+std::string fragmentSource = "\
+#version 330 core \
+out vec4 FragColor;\
+  \
+in vec4 vertexColor; // the input variable from the vertex shader (same name and same type)  \
+\
+void main()\
+{\
+    FragColor = vertexColor;\
+} \
+int main (int argc, char * argv[])\
+{\
+ ";
 GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-source = (const GLchar *)fragmentSource.c_str();
+const GLchar *source = (const GLchar *)fragmentSource.c_str();
 glShaderSource(fragmentShader, 1, &source, 0);
 glCompileShader(fragmentShader);
 
